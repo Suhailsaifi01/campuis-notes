@@ -17,7 +17,7 @@ A premium SaaS-style dashboard for college students to upload, organize, and sha
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/college-notes.git
+   git clone https://github.com/Suhailsaifi01/campuis-notes.git
    ```
 
 2. **Install dependencies**:
