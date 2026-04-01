@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - College Notes Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="p-3">
+                <i class="fas fa-graduation-cap fa-2x mb-4" style="color: #4f46e5;"></i>
+            </div>
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="Home.html" class="nav-item active">
+                <i class="fas fa-home nav-icon"></i>
+                <span>Home</span>
+            </a>
+            <a href="Profile.html" class="nav-item">
+                <i class="fas fa-user nav-icon"></i>
+                <span>Profile</span>
+            </a>
+            <a href="Notes.html" class="nav-item">
+                <i class="fas fa-book nav-icon"></i>
+                <span>Notes</span>
+            </a>
+            <a href="Share.html" class="nav-item">
+                <i class="fas fa-share-alt nav-icon"></i>
+                <span>Share</span>
+            </a>
+            <a href="setting.html" class="nav-item">
+                <i class="fas fa-cog nav-icon"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <!-- Top Nav -->
+        <header class="top-nav">
+            <div class="d-flex align-items-center">
+                <div class="nav-profile"></div>
+                <div class="hamburger" onclick="toggleSidebar()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <input type="text" class="search-global ms-3" id="homeSearch" placeholder="🔍 Search notes instantly...">
+                <div class="status-dot online" id="statusDot"></div>
+            </div>
+            <div class="nav-icons">
+                <button class="nav-btn" onclick="window.location.href='dashboard.html'" title="Dashboard">
+                    <i class="fas fa-chart-line"></i>
+                </button>
+                <button class="nav-btn" onclick="quickUpload()" title="Upload Note">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <div class="notifications-dropdown">
+                    <button class="nav-btn" onclick="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-badge">3</span>
+                    </button>
+                    <div class="notif-list" id="notifList"></div>
+                </div>
+                <button class="nav-btn" onclick="toggleTheme()" title="Theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section mb-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <h1 class="hero-title">
+                            Welcome to <span class="gradient-text">College Notes Hub</span>
+                        </h1>
+                        <p class="hero-subtitle lead mb-4">
+                            Organize your study materials, share with classmates, and track your academic progress with advanced analytics
+                        </p>
+                        <div class="hero-stats row g-3 mb-5">
+                            <div class="col-md-4">
+                                <div class="stat-hero">
+                                    <div class="stat-number" id="heroTotalNotes">Loading...</div>
+                                    <div class="stat-label">Your Notes</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-hero">
+                                    <div class="stat-number" id="heroSubjects">Loading...</div>
+                                    <div class="stat-label">Subjects</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-hero">
+                                    <div class="stat-number" id="heroStorage">Loading...</div>
+                                    <div class="stat-label">Storage</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="cta-stack">
+                            <button class="btn btn-primary btn-lg w-100 mb-3 hero-cta" onclick="quickUpload()">
+                                <i class="fas fa-cloud-upload-alt me-2"></i>
+                                Upload New Note
+                            </button>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <a href="Notes.html" class="btn btn-outline-light w-100">
+                                        <i class="fas fa-list me-1"></i>All Notes
+                                    </a>
+                                </div>
+                                <div class="col-6">
+                                    <a href="dashboard.html" class="btn btn-outline-light w-100">
+                                        <i class="fas fa-chart-line me-1"></i>Analytics
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature Cards -->
+            <section class="features-section mb-5">
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="feature-card glass-card">
+                            <div class="feature-icon primary">
+                                <i class="fas fa-search-magnifying-glass"></i>
+                            </div>
+                            <h5>AI Smart Search</h5>
+                            <p>Find notes instantly across subjects, semesters, and keywords</p>
+                            <button class="btn btn-sm btn-link p-0" onclick="focusSearch()">
+                                Try Search
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="feature-card glass-card">
+                            <div class="feature-icon success">
+                                <i class="fas fa-infinity"></i>
+                            </div>
+                            <h5>Unlimited Storage</h5>
+                            <p>Your notes backed up forever, accessible anywhere anytime</p>
+                            <div class="storage-indicator">
+                                <div class="storage-progress">
+                                    <div class="storage-fill" style="width: 35%"></div>
+                                </div>
+                                <small>8.2/50 GB used</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="feature-card glass-card">
+                            <div class="feature-icon info">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h5>Collaborate Easily</h5>
+                            <p>Share notes securely with classmates and study groups</p>
+                            <a href="Share.html" class="btn btn-sm btn-outline-info">
+                                Create Link
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="feature-card glass-card">
+                            <div class="feature-icon warning">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h5>Works Offline</h5>
+                            <p>PWA - install on phone, works without internet</p>
+                            <button class="btn btn-sm btn-warning" onclick="installPWA()">
+                                Install App
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Notes Carousel -->
+            <section class="recent-notes mt-5 mb-5">
+                <div class="card glass-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4><i class="fas fa-history me-2 text-info"></i>Recent Notes</h4>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary me-2" onclick="sortRecent('newest')">
+                                Sort Newest
+                            </button>
+                            <a href="Notes.html" class="btn btn-sm btn-primary">View All Notes</a>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="recent-notes-carousel">
+                            <div class="recent-notes-track" id="recentNotesTrack">
+                                <!-- Dynamic recent notes carousel -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Study Recommendations -->
+            <section class="recommendations mt-5">
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <h4><i class="fas fa-lightbulb me-2 text-warning"></i>AI Study Recommendations</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="recommendation-item mb-4">
+                                    <div class="rec-icon success">
+                                        <i class="fas fa-book-open"></i>
+                                    </div>
+                                    <div class="rec-content">
+                                        <h6>Complete OS Notes</h6>
+                                        <p>You've covered 70% of OS. Finish remaining chapters for exam prep.</p>
+                                        <div class="progress mt-2">
+                                            <div class="progress-bar bg-success" style="width: 70%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="recommendation-item">
+                                    <div class="rec-icon info">
+                                        <i class="fas fa-share-alt"></i>
+                                    </div>
+                                    <div class="rec-content">
+                                        <h6>Share DSA Notes</h6>
+                                        <p>Your DSA notes are trending. Share with classmates for collaboration.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card glass-card h-100">
+                            <div class="card-header">
+                                <h5><i class="fas fa-trophy me-2"></i>Achievements Progress</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="achievement-progress mb-3">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Notes Shared</span>
+                                        <span>12/25</span>
+                                    </div>
+                                    <div class="progress mb-3">
+                                        <div class="progress-bar bg-info" style="width: 48%"></div>
+                                    </div>
+                                </div>
+                                <div class="achievement-progress">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span>Study Streak</span>
+                                        <span>7 days</span>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-warning" style="width: 70%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer CTA -->
+            <section class="footer-cta mt-5 text-center">
+                <div class="card glass-card">
+                    <div class="card-body py-5">
+                        <i class="fas fa-rocket fa-3x text-primary mb-4"></i>
+                        <h3>Ready to Ace Your Exams?</h3>
+                        <p class="lead mb-4">Join thousands of students organizing smarter</p>
+                        <div class="d-flex gap-3 justify-content-center flex-wrap">
+                            <button class="btn btn-primary btn-lg px-5">
+                                Start Organizing
+                            </button>
+                            <button class="btn btn-outline-light btn-lg px-5">
+                                Invite Friends
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Initialize home page
+        window.onload = initHomePage;
+
+        function initHomePage() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('welcomeUser').textContent = user.name || 'Student';
+
+            getAllNotes(notes => {
+                const userNotes = notes.filter(n => n.userId === user.email);
+                updateHeroStats(userNotes);
+                loadRecentNotesCarousel(userNotes.slice(0, 8));
+            });
+
+            setupInteractions();
+        }
+
+        function updateHeroStats(userNotes) {
+            document.getElementById('heroTotalNotes').textContent = userNotes.length.toLocaleString();
+            document.getElementById('heroSubjects').textContent = new Set(userNotes.map(n => n.subject)).size;
+            document.getElementById('heroStorage').textContent = (userNotes.reduce((sum, n) => sum + (n.file?.length / 1000000 || 0), 0)).toFixed(1) + ' MB';
+        }
+
+        function loadRecentNotesCarousel(notes) {
+            const track = document.getElementById('recentNotesTrack');
+            if (notes.length === 0) {
+                track.innerHTML = '<div class="col-12 text-center py-5 text-muted"><i class="fas fa-inbox fa-3x mb-3"></i><h5>No notes yet</h5><p>Upload your first note!</p></div>';
+                return;
+            }
+            
+            track.innerHTML = notes.map(note => `
+                <div class="recent-note-item">
+                    <div class="note-card glass-card h-100">
+                        <div class="card-body p-4">
+                            <div class="note-header d-flex justify-content-between align-items-start mb-3">
+                                <h6 class="note-title mb-1">${note.title}</h6>
+                                <div class="note-actions">
+                                    <a href="${note.file}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="note-meta mb-3">
+                                <span class="badge bg-primary me-2">${note.subject}</span>
+                                <span class="badge bg-secondary">${note.semester}</span>
+                            </div>
+                            <small class="text-muted">${new Date(note.timestamp || Date.now()).toLocaleDateString()}</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setupInteractions() {
+            // Search
+            document.getElementById('homeSearch').addEventListener('input', debounce(searchNotes, 300));
+            
+            // Carousel auto-scroll
+            setInterval(() => {
+                const track = document.getElementById('recentNotesTrack');
+                track.scrollBy({ left: 320, behavior: 'smooth' });
+            }, 5000);
+        }
+
+        // Debounced search
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function searchNotes(query) {
+            if (query.length < 2) return;
+            getAllNotes(notes => {
+                const results = notes.filter(note => 
+                    note.title.toLowerCase().includes(query) ||
+                    note.subject.toLowerCase().includes(query)
+                );
+                showSearchResults(results);
+            });
+        }
+
+        function showSearchResults(results) {
+            // Show overlay or modal with results
+            console.log('Search results:', results);
+        }
+
+        function quickUpload() {
+            window.location.href = 'Notes.html#upload';
+        }
+
+        function focusSearch() {
+            document.getElementById('homeSearch').focus();
+        }
+
+        // UI Utilities
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        function toggleNotifications() {
+            document.querySelector('.notif-list').classList.toggle('show');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+
+        function sortRecent(order) {
+            // Implement sorting
+            console.log('Sorting recent:', order);
+        }
+
+        function installPWA() {
+            // PWA install prompt
+            window.location.href = '/manifest.json';
+        }
+    </script>
+</body>
+</html>

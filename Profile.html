@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - College Notes Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Sidebar - same as dashboard -->
+        <nav class="sidebar" id="sidebar">
+            <div class="p-3">
+                <i class="fas fa-graduation-cap fa-2x mb-4" style="color: #4f46e5;"></i>
+            </div>
+            <a href="dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="Home.html" class="nav-item">
+                <i class="fas fa-home nav-icon"></i>
+                <span>Home</span>
+            </a>
+            <a href="Profile.html" class="nav-item active">
+                <i class="fas fa-user nav-icon"></i>
+                <span>Profile</span>
+            </a>
+            <a href="Notes.html" class="nav-item">
+                <i class="fas fa-book nav-icon"></i>
+                <span>Notes</span>
+            </a>
+            <a href="Share.html" class="nav-item">
+                <i class="fas fa-share-alt nav-icon"></i>
+                <span>Share</span>
+            </a>
+            <a href="setting.html" class="nav-item">
+                <i class="fas fa-cog nav-icon"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <!-- Top Nav -->
+        <header class="top-nav">
+            <div class="d-flex align-items-center">
+                <div class="nav-profile"></div>
+                <div class="hamburger" onclick="toggleSidebar()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <input type="text" class="search-global ms-3" placeholder="Search your notes...">
+                <div class="status-dot online" id="statusDot"></div>
+            </div>
+            <div class="nav-icons">
+                <button class="nav-btn" onclick="window.location.href='dashboard.html'" title="Dashboard">
+                    <i class="fas fa-chart-line"></i>
+                </button>
+                <button class="nav-btn" onclick="uploadNote()" title="Upload">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <div class="notifications-dropdown">
+                    <button class="nav-btn" onclick="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-badge">2</span>
+                    </button>
+                    <div class="notif-list" id="notifList"></div>
+                </div>
+                <button class="nav-btn" onclick="toggleTheme()" title="Toggle Theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Profile Hero -->
+            <section class="profile-hero mb-5">
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center text-md-start mb-4 mb-md-0">
+                        <div class="profile-avatar-large mb-3 mx-auto mx-md-0">
+                            <img src="https://ui-avatars.com/api/?name=User&size=128&background=4f46e5&color=fff" alt="Profile Avatar" class="avatar-img" id="profileAvatar">
+                            <button class="btn btn-sm btn-outline-primary change-avatar-btn" onclick="changeAvatar()">
+                                <i class="fas fa-camera"></i> Change
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="profile-info">
+                            <h1 id="profileNameDisplay">Loading...</h1>
+                            <p class="profile-email mb-3" id="profileEmailDisplay">user@example.com</p>
+                            <div class="profile-badges mb-4">
+                                <span class="badge bg-primary fs-6 px-3 py-2 me-2" id="memberLevel">Gold Member</span>
+                                <span class="badge bg-success fs-6 px-3 py-2 me-2" id="totalNotesBadge">25 Notes</span>
+                                <span class="badge bg-info fs-6 px-3 py-2" id="subjectsBadge">5 Subjects</span>
+                            </div>
+                            <div class="profile-stats d-flex gap-4 flex-wrap">
+                                <div class="stat-item">
+                                    <h3 id="storageUsed">12.5 MB</h3>
+                                    <span>Storage</span>
+                                </div>
+                                <div class="stat-item">
+                                    <h3 id="activeShares">8</h3>
+                                    <span>Active Shares</span>
+                                </div>
+                                <div class="stat-item">
+                                    <h3 id="followingCount">15</h3>
+                                    <span>Following</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="row g-4">
+                <!-- Edit Profile Card -->
+                <div class="col-lg-8">
+                    <div class="card glass-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4><i class="fas fa-edit me-2 text-primary"></i>Edit Profile</h4>
+                            <button class="btn btn-primary btn-sm" onclick="saveProfile()">
+                                <i class="fas fa-save me-1"></i>Save Changes
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <form id="profileForm">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="editName" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="editEmail" required>
+                                    </div>
+                                </div>
+                                <div class="row g-3 mt-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">College</label>
+                                        <input type="text" class="form-control" id="editCollege">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Semester</label>
+                                        <select class="form-select" id="editSemester">
+                                            <option>Semester 1</option>
+                                            <option>Semester 2</option>
+                                            <option>Semester 3</option>
+                                            <option>Semester 4</option>
+                                            <option>Semester 5</option>
+                                            <option>Semester 6</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 mt-3">
+                                    <label class="form-label">Bio</label>
+                                    <textarea class="form-control" id="editBio" rows="4" placeholder="Tell others about your academic journey..."></textarea>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-check me-1"></i>Update Profile
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="resetProfile()">
+                                        <i class="fas fa-undo me-1"></i>Reset
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats & Quick Actions -->
+                <div class="col-lg-4">
+                    <div class="card glass-card mb-4">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-bar me-2"></i>Quick Stats</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="stat-grid">
+                                <div class="stat-item">
+                                    <div class="stat-number" id="profileTotalNotes">25</div>
+                                    <small>Total Notes</small>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number" id="profileStorage">12.5 MB</div>
+                                    <small>Storage</small>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number" id="profileShares">8</div>
+                                    <small>Share Links</small>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number" id="profileFollowers">15</div>
+                                    <small>Followers</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <a href="Notes.html" class="btn btn-primary">
+                                    <i class="fas fa-book me-2"></i>Manage Notes
+                                </a>
+                                <a href="dashboard.html" class="btn btn-info">
+                                    <i class="fas fa-chart-line me-2"></i>View Analytics
+                                </a>
+                                <a href="Share.html" class="btn btn-success">
+                                    <i class="fas fa-share me-2"></i>Create Share Link
+                                </a>
+                                <button class="btn btn-warning" onclick="exportProfileData()">
+                                    <i class="fas fa-download me-2"></i>Export Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Achievements & Badges -->
+            <section class="row mt-5">
+                <div class="col-12">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h4><i class="fas fa-trophy me-2 text-warning"></i>Your Achievements</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="achievements-grid">
+                                <div class="achievement-item unlocked">
+                                    <div class="achievement-icon">
+                                        <i class="fas fa-book-open"></i>
+                                    </div>
+                                    <div>
+                                        <h6>First Note</h6>
+                                        <small>Uploaded your first study note</small>
+                                    </div>
+                                </div>
+                                <div class="achievement-item unlocked">
+                                    <div class="achievement-icon">
+                                        <i class="fas fa-share-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Helper</h6>
+                                        <small>Shared 5 notes with classmates</small>
+                                    </div>
+                                </div>
+                                <div class="achievement-item locked">
+                                    <div class="achievement-icon">
+                                        <i class="fas fa-crown"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Top Contributor</h6>
+                                        <small>Share 50+ notes (24 remaining)</small>
+                                    </div>
+                                </div>
+                                <div class="achievement-item locked">
+                                    <div class="achievement-icon">
+                                        <i class="fas fa-mountain"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Peak Performer</h6>
+                                        <small>Upload 100 notes</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Load profile data
+        window.onload = function() {
+            loadProfileData();
+            setupProfileForm();
+        };
+
+        function loadProfileData() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('profileNameDisplay').textContent = user.name || 'Student';
+            document.getElementById('profileEmailDisplay').textContent = user.email || 'student@example.com';
+            document.getElementById('editName').value = user.name || '';
+            document.getElementById('editEmail').value = user.email || '';
+            // Load stats from db.js
+            getAllNotes(notes => {
+                const userNotes = notes.filter(n => n.userId === user.email);
+                document.getElementById('profileTotalNotes').textContent = userNotes.length;
+                document.getElementById('profileStorage').textContent = (userNotes.reduce((sum, n) => sum + (n.file.length / 1000000), 0)).toFixed(1) + ' MB';
+            });
+        }
+
+        function setupProfileForm() {
+            document.getElementById('profileForm').onsubmit = function(e) {
+                e.preventDefault();
+                saveProfile();
+            };
+        }
+
+        function saveProfile() {
+            const user = {
+                name: document.getElementById('editName').value,
+                email: document.getElementById('editEmail').value,
+                college: document.getElementById('editCollege').value,
+                semester: document.getElementById('editSemester').value,
+                bio: document.getElementById('editBio').value
+            };
+            localStorage.setItem('user', JSON.stringify(user));
+            loadProfileData();
+            showNotification('Profile updated successfully!');
+        }
+
+        function resetProfile() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('editName').value = user.name || '';
+            document.getElementById('editEmail').value = user.email || '';
+            // Reset other fields
+        }
+
+        function changeAvatar() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = e => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = r => {
+                        document.getElementById('profileAvatar').src = r.target.result;
+                        localStorage.setItem('avatar', r.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        }
+
+        function exportProfileData() {
+            getAllNotes(notes => {
+                const data = {
+                    user: JSON.parse(localStorage.getItem('user') || '{}'),
+                    notes: notes.filter(n => n.userId === JSON.parse(localStorage.getItem('user') || '{}').email)
+                };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'profile-backup.json';
+                a.click();
+            });
+        }
+
+        // UI Utilities (shared)
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        function toggleNotifications() {
+            document.querySelector('.notif-list').classList.toggle('show');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+
+        function showNotification(message) {
+            // Simple toast notification
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function uploadNote() {
+            window.location.href = 'Notes.html';
+        }
+    </script>
+</body>
+</html>

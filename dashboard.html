@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-theme theme-transition">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - College Notes Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-logo fade-in-up">
+                <i class="fas fa-graduation-cap"></i>
+                <h5 class="mt-2 mb-0">Notes Hub</h5>
+            </div>
+            <a href="dashboard.html" class="nav-item active">
+                <i class="fas fa-chart-line nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="dashboard.html#upload" class="nav-item">
+                <i class="fas fa-upload nav-icon"></i>
+                <span>Upload</span>
+            </a>
+            <a href="Notes.html" class="nav-item">
+                <i class="fas fa-book nav-icon"></i>
+                <span>Notes</span>
+            </a>
+            <a href="dashboard.html#top" class="nav-item">
+                <i class="fas fa-star nav-icon"></i>
+                <span>Top Notes</span>
+            </a>
+            <a href="Share.html" class="nav-item">
+                <i class="fas fa-share-alt nav-icon"></i>
+                <span>Share</span>
+            </a>
+            <a href="Profile.html" class="nav-item">
+                <i class="fas fa-user nav-icon"></i>
+                <span>Profile</span>
+            </a>
+            <a href="setting.html" class="nav-item">
+                <i class="fas fa-cog nav-icon"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <!-- Top Navbar -->
+        <header class="top-nav">
+            <div class="d-flex align-items-center">
+                <div class="nav-profile" title="Profile"></div>
+                <div class="hamburger" onclick="toggleSidebar()">
+                    <span></span><span></span><span></span>
+                </div>
+                <input type="text" class="search-global" id="globalSearch" placeholder="Search notes, subjects...">
+                <div class="status-dot" id="statusDot"></div>
+            </div>
+            <div class="nav-icons">
+                <button class="nav-btn" onclick="location.reload()" title="Refresh">
+                    <i class="fas fa-arrow-rotate-right"></i>
+                </button>
+                <button class="nav-btn" onclick="uploadNoteQuick()" title="Quick Upload">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <div class="notifications-dropdown">
+                    <button class="nav-btn" onclick="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                        <span class="notif-badge" id="notifCount">3</span>
+                    </button>
+                    <div class="notif-list" id="notifList"></div>
+                </div>
+                <button class="nav-btn" onclick="toggleTheme()" title="Theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Welcome + Stats -->
+            <section class="dashboard-hero fade-in-up">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-7">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="status-avatar me-3">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h1 class="hero-title mb-1">Welcome back, Student</h1>
+                                <p class="hero-subtitle">Your study dashboard - quick access to everything</p>
+                            </div>
+                        </div>
+                        <!-- Quick Stats Row -->
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-4">
+                                <div class="stat-card primary">
+                                    <i class="fas fa-book-open stat-icon"></i>
+                                    <h3 id="totalNotes">0</h3>
+                                    <span>Total Notes</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card success">
+                                    <i class="fas fa-bookmark stat-icon"></i>
+                                    <h3 id="subjectsCount">0</h3>
+                                    <span>Subjects</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card accent">
+                                    <i class="fas fa-cloud-arrow-up stat-icon"></i>
+                                    <h3 id="storageUsed">0 MB</h3>
+                                    <span>Storage</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="quick-actions-card glass-card p-4">
+                            <h5 class="mb-4"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <button class="btn btn-primary w-100" onclick="window.location.href='Notes.html'">
+                                        <i class="fas fa-book me-2"></i>View Notes
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-success w-100" onclick="quickUpload()">
+                                        <i class="fas fa-plus me-2"></i>Upload
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-accent w-100" onclick="window.location.href='#top-notes'">
+                                        <i class="fas fa-star me-2"></i>Top Notes
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-outline w-100" onclick="exportAll()">
+                                        <i class="fas fa-download me-2"></i>Export
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Continue Where Left Off + Top Notes -->
+            <div class="row g-4 mb-5">
+                <div class="col-lg-8">
+                    <div class="card glass-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4><i class="fas fa-clock-rotate-left me-2 text-muted"></i>Continue Where You Left Off</h4>
+                            <a href="Notes.html" class="btn btn-sm btn-outline">View All Notes</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="notes-grid" id="recentNotesGrid">
+                                <!-- Dynamic recent notes -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card glass-card h-100">
+                        <div class="card-header">
+                            <h5><i class="fas fa-star me-2 text-warning"></i>Top Notes This Week</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="topNotesList">
+                                <!-- Dynamic top notes -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subjects + Charts Row -->
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-bookmark me-2"></i>Subjects Overview</h5>
+                        </div>
+                        <div class="card-body text-center">
+                            <canvas id="subjectsChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card glass-card">
+                        <div class="card-header d-flex justify-content-between">
+                            <h5><i class="fas fa-chart-line me-2"></i>Activity Timeline</h5>
+                            <div>
+                                <button class="btn btn-sm btn-outline me-2" onclick="changeTimeline('week')">Week</button>
+                                <button class="btn btn-sm btn-outline" onclick="changeTimeline('month')">Month</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="activityChart" height="120"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+    <script>
+        let dashboardChart, subjectsChart, activityChart;
+
+        // Load dashboard on start
+        window.addEventListener('load', initDashboard);
+
+        async function initDashboard() {
+            await loadDashboardData();
+            setupEventListeners();
+            renderCharts();
+        }
+
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/notes');
+                const notes = await response.json();
+                
+                updateStats(notes);
+                renderRecentNotes(notes.slice(0, 4));
+                renderTopNotes(notes.slice(0, 3));
+                renderSubjectsChart(notes);
+                renderActivityChart(notes);
+            } catch (err) {
+                console.warn('Backend unavailable, using IndexedDB');
+                getAllNotes(loadDashboardData);
+            }
+        }
+
+        function updateStats(notes) {
+            document.getElementById('totalNotes').textContent = notes.length;
+            document.getElementById('subjectsCount').textContent = new Set(notes.map(n => n.subject)).size;
+            document.getElementById('storageUsed').textContent = 'Loading...'; // Calculate from filenames
+        }
+
+        function renderRecentNotes(notes) {
+            const grid = document.getElementById('recentNotesGrid');
+            grid.innerHTML = notes.map(note => `
+                <div class="note-card fade-in-up">
+                    <div class="note-preview" style="background: linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16)}, #${Math.floor(Math.random()*16777215).toString(16)})">
+                        <div class="note-badge">${note.subject?.slice(0,2).toUpperCase()}</div>
+                    </div>
+                    <div class="note-content">
+                        <h6 class="note-title">${note.title}</h6>
+                        <div class="note-meta">
+                            <span><i class="fas fa-tag me-1"></i>${note.subject}</span>
+                            <span><i class="fas fa-calendar me-1"></i>${new Date(note.id).toLocaleDateString()}</span>
+                        </div>
+                        <div class="note-actions">
+                            <button class="btn btn-sm btn-outline me-2"><i class="fas fa-download"></i></button>
+                            <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') || '<div class="text-center py-8 text-muted"><i class="fas fa-inbox fa-3x mb-3 opacity-50"></i><p>No recent notes. <a href="Notes.html">Upload your first</a></p></div>';
+        }
+
+        function renderTopNotes(notes) {
+            const list = document.getElementById('topNotesList');
+            list.innerHTML = notes.map((note, i) => `
+                <div class="top-note-item p-3 border-bottom">
+                    <div class="d-flex align-items-center">
+                        <div class="rank-badge me-3">${i+1}</div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">${note.title}</h6>
+                            <small class="text-muted">${note.subject} • ${note.filename}</small>
+                        </div>
+                        <button class="btn btn-sm btn-primary"><i class="fas fa-download"></i></button>
+                    </div>
+                </div>
+            `).join('') || '<div class="text-center py-4 text-muted">No top notes yet</div>';
+        }
+
+        function renderSubjectsChart(notes) {
+            const ctx = document.getElementById('subjectsChart')?.getContext('2d');
+            if (!ctx) return;
+            
+            const subjects = notes.reduce((acc, note) => {
+                acc[note.subject || 'Uncategorized'] = (acc[note.subject || 'Uncategorized'] || 0) + 1;
+                return acc;
+            }, {});
+
+            if (subjectsChart) subjectsChart.destroy();
+            subjectsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(subjects),
+                    datasets: [{
+                        data: Object.values(subjects),
+                        backgroundColor: ['#3b82f6', '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'],
+                        borderWidth: 0,
+                        cutout: '65%'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } }
+                    }
+                }
+            });
+        }
+
+        function renderActivityChart(notes) {
+            const ctx = document.getElementById('activityChart')?.getContext('2d');
+            if (!ctx) return;
+            
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
+            const data = months.map(() => Math.floor(Math.random() * 20));
+
+            if (activityChart) activityChart.destroy();
+            activityChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'Notes Added',
+                        data,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#3b82f6',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            ticks: { color: 'var(--text-muted)' }
+                        },
+                        x: { grid: { display: false }, ticks: { color: 'var(--text-muted)' } }
+                    }
+                }
+            });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('globalSearch').addEventListener('input', function(e) {
+                searchNotes(e.target.value);
+            });
+        }
+
+        // Quick actions
+        function quickUpload() {
+            showToast('Redirecting to upload...', 'info');
+            setTimeout(() => location.href = 'Notes.html#uploadForm', 500);
+        }
+
+        function exportAll() {
+            getAllNotes(notes => {
+                const dataStr = JSON.stringify(notes, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `notes-backup-${new Date().toISOString().slice(0,10)}.json`;
+                a.click();
+                showToast('All notes exported!');
+            });
+        }
+
+        // UI Utils
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            const icon = document.getElementById('themeIcon');
+            icon.className = document.body.classList.contains('dark-theme') ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        function toggleNotifications() {
+            document.querySelector('.notif-list').classList.toggle('show');
+        }
+
+        // Search across dashboard
+        function searchNotes(query) {
+            // Filter recent/top notes
+            console.log('Global search:', query);
+        }
+    </script>
+</body>
+</html>

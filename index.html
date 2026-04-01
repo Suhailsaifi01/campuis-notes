@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-theme theme-transition">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Notes Hub - Instagram Style</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal" >
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Login</h2>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <p style="margin-top: 15px;">Don't have an account? <a href="#" onclick="switchModal('loginModal', 'signupModal')">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2><i class="fas fa-user-plus"></i> Sign Up</h2>
+            <form onsubmit="signup(event)">
+                <div class="form-group">
+                    <input type="text" id="signupName" class="form-control" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="signupEmail" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="signupPassword" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                <p style="margin-top: 15px;">Already have an account? <a href="#" onclick="switchModal('signupModal', 'loginModal')">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="p-3">
+                <i class="fas fa-graduation-cap fa-2x mb-4" style="color: var(--gradient);"></i>
+            </div>
+            <a href="dashboard.html" class="nav-item active">
+                <i class="fas fa-chart-line nav-icon"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="dashboard.html#home" class="nav-item">
+                <i class="fas fa-home nav-icon"></i>
+                <span>Home</span>
+            </a>
+            <a href="Profile.html" class="nav-item">
+                <i class="fas fa-user nav-icon"></i>
+                <span>Profile</span>
+            </a>
+            <a href="Notes.html" class="nav-item">
+                <i class="fas fa-book nav-icon"></i>
+                <span>Notes</span>
+            </a>
+            <a href="#" class="nav-item" onclick="setActiveNav(this)">
+                <i class="fas fa-share-alt nav-icon"></i>
+                <span>Share</span>
+            </a>
+            <a href="#" class="nav-item" onclick="setActiveNav(this)">
+                <i class="fas fa-cog nav-icon"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <!-- Top Nav -->
+        <header class="top-nav">
+            <div class="d-flex align-items-center">
+                <div class="nav-profile"></div>
+                <div class="hamburger" onclick="toggleSidebar()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <input type="text" class="search-global ms-3" id="globalSearch" placeholder="Search notes..." onkeyup="globalSearch()">
+                <div class="status-dot" id="statusDot"></div>
+            </div>
+<div class="nav-icons">
+                <button class="nav-btn" onclick="showDashboard()" title="Dashboard">
+                    <i class="fas fa-chart-line"></i>
+                </button>
+                <button class="nav-btn" onclick="uploadNote()" title="Upload">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <div class="notifications-dropdown">
+                    <button class="nav-btn" onclick="toggleNotifications()">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="notif-list" id="notifList">
+                        <!-- Notifications populated by JS -->
+                    </div>
+                </div>
+                <button class="nav-btn" onclick="toggleTheme()" title="Toggle Theme">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Homepage -->
+            <section id="homePage" class="home-hero">
+                <div class="hero-content">
+                    <div class="tech-badges">
+                        <span class="badge">🚀 Modern Tech Stack</span>
+                        <span class="badge">💾 IndexedDB</span>
+                        <span class="badge">🎨 PWA Ready</span>
+                        <span class="badge">⚡ Offline First</span>
+                    </div>
+                    <h1><i class="fas fa-graduation-cap"></i> College Notes Hub</h1>
+                    <p class="hero-subtitle">Elite platform powered by cutting-edge tech. Organize | Share | Conquer academics with AI-ready, progressive web excellence.</p>
+                    <div class="features-grid">
+                        <div class="feature">
+                            <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                            <h4>Drag & Upload</h4>
+                            <p>PDFs instantly organized</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-search fa-2x"></i>
+                            <h4>Smart Search</h4>
+                            <p>Find notes instantly</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-share-alt fa-2x"></i>
+                            <h4>Seamless Share</h4>
+                            <p>Export & collaborate</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-mobile-alt fa-2x"></i>
+                            <h4>Mobile Elite</h4>
+                            <p>Works everywhere</p>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button onclick="showNotes()" class="btn btn-primary btn-lg me-3">📚 Launch Notes</button>
+                        <button onclick="showDashboard()" class="btn btn-outline-light btn-lg">📊 View Dashboard</button>
+                    </div>
+                    <div class="owner-section mt-5">
+                        <div class="wahav-avatar">
+                            <i class="fas fa-user-graduate fa-3x"></i>
+                        </div>
+                        <h3>Mohd Wahav</h3>
+                        <p class="unique-tagline">Building bridges between knowledge &amp; success 🚀 | Notes Revolutionized for Modern Students</p>
+                        <div class="credits">
+                            <span>💡 Crafted with passion | © 2026 Mohd Wahav</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="personalize-section">
+                    <h3>Personalize Your Profile</h3>
+                    <div class="profile-options">
+                        <button onclick="editProfile()" class="profile-btn"><i class="fas fa-user-edit"></i> Edit Profile</button>
+                        <button onclick="changeAvatar()" class="profile-btn"><i class="fas fa-image"></i> Change Avatar</button>
+                        <button onclick="viewAchievements()" class="profile-btn"><i class="fas fa-trophy"></i> Achievements</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notes Section -->
+            <section id="notesSection" style="display: none;">
+                <div class="notes-page">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-book"></i> Notes Library</h2>
+                        <button onclick="shareNotes()" class="btn btn-info"><i class="fas fa-share"></i> Share Notes</button>
+                    </div>
+                    <div class="upload-box mb-4">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="text" id="title" class="form-control mb-2" placeholder="Title">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="subject" class="form-control mb-2" placeholder="Subject">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="semester" class="form-control mb-2" placeholder="Semester">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="file" id="fileInput" class="form-control mb-2" accept="application/pdf">
+                                <button onclick="addNote()" class="btn btn-primary w-100">Upload</button>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button onclick="exportNotes()" class="btn btn-secondary me-2"><i class="fas fa-download"></i> Export All</button>
+                            <input type="file" id="importFile" accept=".json" class="d-inline-block me-2" style="width: auto;">
+                            <label for="importFile" class="btn btn-success"><i class="fas fa-upload"></i> Import</label>
+                        </div>
+                    </div>
+                    <div class="search-box mb-4">
+                        <input type="text" id="search" class="form-control" placeholder="🔍 Search your notes..." onkeyup="searchNotes()">
+                    </div>
+                    <div id="notesContainer" class="notes-grid"></div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profileSection" style="display: none;">
+                <div class="profile-header d-flex align-items-center mb-5">
+                    <div class="profile-avatar-large me-4">
+                        <i class="fas fa-user-graduate fa-4x"></i>
+                    </div>
+                    <div>
+                        <h1 id="profileName"><i class="fas fa-user"></i> Your Profile</h1>
+                        <p id="profileEmail" class="text-muted">email@example.com</p>
+                        <button onclick="showEditProfile()" class="btn btn-primary">✏️ Edit Profile</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <h3>📊 Your Stats</h3>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <h4 id="totalNotes">0</h4>
+                                    <p>Total Notes</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h4 id="subjectsCount">0</h4>
+                                    <p>Subjects</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h4 id="storageUsed">-</h4>
+                                    <p>Storage</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <h3>🎯 Quick Actions</h3>
+                            <button onclick="showNotes()" class="btn btn-outline-primary w-100 mb-2">📚 Notes</button>
+                            <button onclick="showDashboard()" class="btn btn-outline-info w-100 mb-2">📊 Dashboard</button>
+                            <button onclick="shareNotes()" class="btn btn-outline-success w-100">🔗 Share</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settingsSection" style="display: none;">
+                <div class="settings-page">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <h4>🌙 Theme</h4>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="darkModeSwitch" onchange="toggleTheme()">
+                                    <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <h4>🔔 Notifications</h4>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notifUpload" checked>
+                                    <label class="form-check-label" for="notifUpload">Upload Success</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notifShare" checked>
+                                    <label class="form-check-label" for="notifShare">Share Events</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-4">
+                        <h4>🔄 Data Management</h4>
+                        <button onclick="exportNotes()" class="btn btn-secondary me-2"><i class="fas fa-download"></i> Export Data</button>
+                        <button onclick="clearLocalData()" class="btn btn-danger" style="display: none;" id="clearBtn">🗑️ Clear All Data</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Edit Profile Section -->
+            <section id="editProfileSection" style="display: none;">
+                <div class="edit-profile-page">
+                    <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
+                    <form id="profileForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" id="editName" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" id="editEmail" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Bio</label>
+                                    <textarea id="editBio" class="form-control" rows="3" placeholder="Tell us about yourself..."></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>College</label>
+                                    <input type="text" id="editCollege" class="form-control" placeholder="Your College">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">💾 Save Changes</button>
+                            <button type="button" onclick="showProfile()" class="btn btn-secondary btn-lg">← Back to Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <canvas id="particles-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="db.js"></script>
+    <script src="app-new.js"></script>
+</body>
+</html>
