@@ -36,7 +36,7 @@ async function uploadNote(title, subject, file) {
 
     showLoading(true);
     try {
-        const response = await fetch("http://127.0.0.1:5000/upload", {
+        const response = await fetch("/upload", {
             method: "POST",
             body: formData
         });
@@ -59,7 +59,7 @@ async function uploadNote(title, subject, file) {
 // Load notes for any grid
 async function loadNotes(gridId = 'notesGrid') {
     try {
-        const response = await fetch('http://127.0.0.1:5000/notes');
+        const response = await fetch('/notes');
         const notes = await response.json();
         displayNotes(notes, gridId);
         notes.forEach(addNoteToDB);
@@ -80,7 +80,7 @@ function displayNotes(notes, gridId) {
                     <span>${note.subject}</span>
                 </div>
                 <div class="note-actions">
-                    <a href="http://127.0.0.1:5000/project/uploads/${note.filename}" class="btn btn-sm btn-primary" target="_blank">
+                    <a href="/uploads/${note.filename}" class="btn btn-sm btn-primary" target="_blank">
                         <i class="fas fa-download"></i> PDF
                     </a>
                 </div>
@@ -92,7 +92,7 @@ function displayNotes(notes, gridId) {
 // Dashboard-specific functions
 async function loadDashboardData() {
     try {
-        const response = await fetch('http://127.0.0.1:5000/notes');
+        const response = await fetch('/notes');
         const notes = await response.json();
         renderDashboardStats(notes);
         renderRecentNotes(notes.slice(-4));
@@ -118,14 +118,14 @@ function renderDashboardStats(notes) {
 
 function renderRecentNotes(notes) {
     document.getElementById('recentNotesGrid').innerHTML = notes.map(n => {
-        return `<div class="note-card"><div class="note-preview" style="background:linear-gradient(135deg,${['#3b82f6','#8b5cf6','#10b981','#f59e0b'][Math.floor(Math.random()*4)]})"></div><div class="note-content"><h6>${n.title}</h6><div class="note-meta"><span>${n.subject}</span></div><div class="note-actions"><a href="http://127.0.0.1:5000/project/uploads/${n.filename}" class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-download"></i></a></div></div></div>`;
+                        return `<div class="note-card"><div class="note-preview" style="background:linear-gradient(135deg,${['#3b82f6','#8b5cf6','#10b981','#f59e0b'][Math.floor(Math.random()*4)]})"></div><div class="note-content"><h6>${n.title}</h6><div class="note-meta"><span>${n.subject}</span></div><div class="note-actions"><a href="/uploads/${n.filename}" class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-download"></i></a></div></div></div>`;
     }).join('') || '<div class="empty-state text-center py-8"><i class="fas fa-clock-rotate-left fa-2x mb-3 opacity-50"></i><p>No recent notes</p></div>';
 }
 
 function renderTopNotes(notes) {
     const list = document.getElementById('topNotesList');
     list.innerHTML = notes.map((n, i) => {
-        return `<div class="d-flex align-items-center p-3 border-bottom"><div class="rank-badge fs-6 fw-bold text-primary me-3">${i+1}</div><div class="flex-grow-1"><h6 class="mb-1">${n.title}</h6><small class="text-muted">${n.subject}</small></div><a href="http://127.0.0.1:5000/project/uploads/${n.filename}" class="btn btn-sm btn-primary ms-auto" target="_blank"><i class="fas fa-download"></i></a></div>`;
+                        return `<div class="d-flex align-items-center p-3 border-bottom"><div class="rank-badge fs-6 fw-bold text-primary me-3">${i+1}</div><div class="flex-grow-1"><h6 class="mb-1">${n.title}</h6><small class="text-muted">${n.subject}</small></div><a href="/uploads/${n.filename}" class="btn btn-sm btn-primary ms-auto" target="_blank"><i class="fas fa-download"></i></a></div>`;
     }).join('') || '<div class="text-center py-4 text-muted">No top notes</div>';
 }
 

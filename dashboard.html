@@ -216,14 +216,14 @@
         window.addEventListener('load', initDashboard);
 
         async function initDashboard() {
-            await loadDashboardData();
+        await loadDashboardData();
             setupEventListeners();
             renderCharts();
         }
 
         async function loadDashboardData() {
             try {
-                const response = await fetch('http://127.0.0.1:5000/notes');
+                const response = await fetch('/notes');
                 const notes = await response.json();
                 
                 updateStats(notes);

@@ -4,20 +4,17 @@ const cors = require('cors');
 const path = require('path');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const multer = require('multer');
+const fs = require('fs');
 
 const app = express();
 
-app.use(helmet({ contentSecurityPolicy: false })); // Basic security headers
-app.use(morgan('dev')); // Request logging
-app.use(express.json({ limit: '1mb' })); // Protect against large payloads
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(morgan('dev'));
+app.use(express.json({ limit: '1mb' }));
 app.use(cors());
 
-// IMPORTANT:
-// - This server uses MongoDB (NOT the SQLite file at `project/database.db`).
-// - Your current frontend (app.js) calls Flask endpoints: /upload and /notes on port 5000.
-// - To avoid port conflicts with Flask, this server defaults to port 5001.
-
-const PORT = process.env.PORT ? Number(process.env.PORT) : 5001;
+const PORT = process.env.PORT || 5001;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/college_notes';
 
 mongoose.connection.on('connected', () => {
@@ -57,7 +54,32 @@ function requireMongo(req, res, next) {
   return next();
 }
 
+// Serve static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '1d' }));
+app.use(express.static(__dirname));
 
+// Multer setup
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadDir),
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
+    cb(null, uniqueName);
+  }
+});
+
+const upload = multer({ 
+  storage, 
+  limits: { fileSize: 10 * 1024 * 1024 }, 
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') cb(null, true);
+    else cb(new Error('Only PDFs allowed'), false);
+  } 
+});
+
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({
     ok: true,
@@ -65,9 +87,37 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '1d' }));
-app.use(express.static(__dirname));
+// Flask-compatible endpoints
+app.post('/upload', upload.single('file'), requireMongo, async (req, res, next) => {
+  try {
+    const { title, subject } = req.body;
+    if (!title || !subject || !req.file) return res.status(400).json({ error: 'Missing title/subject/file' });
+
+    const noteData = {
+      title, 
+      subject, 
+      filename: req.file.filename,
+      content: req.file.originalname
+    };
+    const note = new Note(noteData);
+    await note.save();
+
+    res.json({
+      id: note._id,
+      filename: req.file.filename,
+      message: 'Upload successful'
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/notes', requireMongo, async (req, res, next) => {
+  try {
+    const notes = await Note.find().sort({ date: -1 });
+    res.json(notes);
+  } catch (err) { next(err); }
+});
 
 // API Routes
 app.get('/api/notes', requireMongo, async (req, res, next) => {
@@ -101,8 +151,5 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => console.log(`Mongo API server running on port ${PORT}`));
-
-
-
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 

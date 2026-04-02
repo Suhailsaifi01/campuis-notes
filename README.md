@@ -1,32 +1,46 @@
-# Campus Notes Sharing System
+# College Notes Hub
 
-A premium SaaS-style dashboard for college students to upload, organize, and share PDF notes. Built with a Flask backend and a modern glassmorphism frontend.
+Premium SaaS-style dashboard for college students to upload, organize, and share PDF notes.
 
 ## Features
-- **Premium Dashboard**: Visualized stats, activity charts, and recent notes.
-- **Secure Uploads**: PDF management with unique naming and metadata.
-- **Search & Filter**: Quickly find notes by title or subject.
-- **Responsive Design**: Works on mobile and desktop with a soft dark theme.
+- Premium Dashboard with stats and charts
+- Secure PDF upload (10MB limit)
+- Notes organization by title/subject
+- MongoDB backend for persistence
+- Responsive glassmorphism UI
+- Offline support (IndexedDB fallback)
+- Share via link (deployed version)
 
 ## Tech Stack
-- **Backend**: Python (Flask), SQLite
-- **Frontend**: HTML5, CSS3 (Glassmorphism), JavaScript (Vanilla)
-- **Charts**: Chart.js
+- Backend: Node.js (Express), MongoDB
+- Frontend: HTML5, CSS3 (Glassmorphism), Vanilla JS
+- File handling: Multer
+- Charts: Chart.js
 
-## Getting Started
+## Local Setup
+1. `npm install`
+2. Start MongoDB locally (or skip for static testing)
+3. `npm start`
+4. Open http://localhost:5001
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/Suhailsaifi01/campus-notes.git
-   ```
+**Note:** Without MongoDB, uploads/API will show 'MongoDB not connected' but static pages work.
 
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Production Deployment (Render.com - Free)
+1. Push to GitHub: `git add . && git commit -m "Deploy-ready" && git push`
+2. Go to https://render.com, connect GitHub repo.
+3. New > Web Service
+   - Runtime: Node
+   - Build: `npm install`
+   - Start: `npm start`
+   - Env vars: `MONGODB_URI` = MongoDB Atlas free cluster URI
+4. Deploy → Get https://your-app.onrender.com (free tier sleeps after inactivity).
 
-3. **Run the server**:
-   ```bash
-   python project/app.py
-   ```
-   Visit `http://127.0.0.1:5000` in your browser.
+## MongoDB Atlas (Free)
+1. https://cloud.mongodb.com → New Cluster (free M0)
+2. Create user, get connection string
+3. Whitelist 0.0.0.0/0 (all IPs)
+4. Set `MONGODB_URI` in Render dashboard.
+
+**Live demo:** [Insert Render URL here after deploy]
+
+© 2024 College Notes Hub

@@ -1,13 +1,16 @@
-# Upload Functionality Implementation Plan
+# Deployment Plan Progress
 
-## Steps:
-- [x] Step 1: Create shared JS functions in app.js (upload logic, displayNotes, searchNotes)
-- [x] Step 2: Update Notes.html to wire form, buttons, and load notes (inline calls to app.js funcs)
-- [x] Step 3: Test upload/display (run backend if needed)
-- [ ] Step 4: Polish UI (toasts, loading) + verify DB/uploads
+## Approved Plan Steps:
+1. [✅] Update package.json: Add multer dependency.
+2. [✅] Edit server.js: 
+   - Added multer upload /upload POST (saves PDFs to uploads/, saves note to Mongo).
+   - Added /notes GET.
+   - Serve /uploads static.
+3. [✅] Fix frontend hardcoded URLs: Replaced 'http://127.0.0.1:5000' with relative '/upload', '/notes', '/uploads/' in app.js, app-new.js, dashboard.html.
+4. [✅] Update README.md: Added Render deployment + Mongo Atlas instructions.
+5. [ ] Test locally: `npm install && npm start`, verify upload/API on localhost:5001.
+6. [ ] Commit/push to GitHub: `git add . && git commit -m "Deploy-ready fixes" && git push`.
+7. [ ] Deploy to Render.com: Link GitHub repo, set env vars (free MongoDB Atlas), get shareable URL.
 
-Current progress: Completed Steps 1-3. UI polish added (toasts/loading CSS). Download links point to /project/uploads/ - adjust if needed. Backend uploads/ exists (pdf.txt visible). Task complete: snippet integrated, form wired, notes load/display/search/export/import work.
+**Current status: Starting step 1**
 
-To test:
-cd project && python app.py
-Open Notes.html in browser, upload PDF (fill form), verify toast/DB/uploads/list.
